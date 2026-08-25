@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>훈민정음 국어학 평가원 | 중세국어 500제 국어능력평가 플랫폼</title>
+  <meta name="description" content="15세기 훈민정음 창제 원리, 동국정운식 한자음 체계, 소실 문자와 중세국어 문법을 총망라한 500제 국가 표준 국어학 역량평가 및 학습 시스템" />
+
+  <!-- Google Fonts: Noto Serif KR, Plus Jakarta Sans, JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Noto+Serif+KR:wght@400;600;700;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/tokens.css" />
+  <link rel="stylesheet" href="css/layout.css" />
+  <link rel="stylesheet" href="css/components.css" />
+</head>
+
+<body>
+  <!-- Programmers Top Global Navigation Bar (GNB) -->
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand-block" href="index.html">
+        <div class="brand-icon-sq">&alpha;</div>
+        <div class="brand-title">ALPHAGH</div>
+      </a>
+
+      <!-- Navigation Tabs -->
+      <nav class="nav-tabs" role="tablist" aria-label="메인 메뉴">
+        <div class="nav-item-dropdown-wrap">
+          <button class="nav-tab-btn" data-tab="exam" role="tab">
+            <span class="nav-badge-top">500제</span>
+            국어평가
+          </button>
+
+          <!-- Programmers Sliding White Mega Dropdown Menu (Direct Child of Dropdown Wrap) -->
+          <div class="mega-dropdown-panel" id="dropdown-test-panel">
+            <div class="mega-dropdown-inner">
+              <!-- Left Column: Test Subcategories -->
+              <div class="mega-col">
+                <h4 class="mega-col-title">중세국어 평가 문제</h4>
+                <ul class="mega-link-list">
+                  <li><a href="#" class="mega-link" data-action="all-problems"><span class="mega-link-arrow">&rarr;</span> 모든 문제</a></li>
+                  <li><a href="#" class="mega-link" data-action="basic-problems"><span class="mega-link-arrow">&rarr;</span> 기초 문제</a></li>
+                  <li><a href="#" class="mega-link" data-action="intro-problems"><span class="mega-link-arrow">&rarr;</span> 입문 문제</a></li>
+                </ul>
+              </div>
+
+              <!-- Center Column: Special Mode & Skill Check -->
+              <div class="mega-col">
+                <h4 class="mega-col-title">역량 진단 & 인증</h4>
+                <ul class="mega-link-list">
+                  <li><a href="#" class="mega-link" data-action="cert">국어학 역량인증시험</a></li>
+                  <li><a href="#" class="mega-link" data-action="infinite">무한 챌린지 모드</a></li>
+                  <li><a href="#" class="mega-link" data-action="review">오답노트 복습 훈련</a></li>
+                  <li><a href="#" class="mega-link" data-action="weakness">취약 영역 정밀 클리닉</a></li>
+                </ul>
+              </div>
+
+              <!-- Right Column: Interactive Card Preview -->
+              <div class="mega-col-preview">
+                <div class="mega-preview-card">
+                  <div class="mega-preview-badge">실시간 진단 활동</div>
+                  <div class="mega-grass-mock">
+                    <div class="grass-bar" style="height: 60%;"></div>
+                    <div class="grass-bar" style="height: 85%;"></div>
+                    <div class="grass-bar" style="height: 40%;"></div>
+                    <div class="grass-bar" style="height: 95%;"></div>
+                    <div class="grass-bar" style="height: 70%;"></div>
+                    <div class="grass-bar" style="height: 100%;"></div>
+                    <div class="grass-bar" style="height: 50%;"></div>
+                  </div>
+                  <h5 class="mega-card-title">나의 중세국어 역량 활동 내역을 살펴보세요!</h5>
+                  <p class="mega-card-desc">매일매일 실전 모의평가 풀고 성취도를 향상시켜보세요.</p>
+                  <a href="#" class="mega-card-btn" id="btn-mega-goto-stats">역량 진단 내역 보기 &gt;</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      <!-- Right Actions -->
+      <div class="header-actions">
+        <button class="header-link-btn" id="btn-header-wrong">오답노트</button>
+        <button class="btn-login-outline" id="btn-quick-start">시험 시작</button>
+        <!-- Mobile 3-Line Hamburger Button -->
+        <button class="btn-mobile-hamburger" id="btn-mobile-menu" aria-label="메뉴 열기">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Programmers Mobile 2-Column Full-Screen Drawer Menu -->
+  <div class="mobile-drawer-overlay" id="mobile-drawer">
+    <div class="mobile-drawer-header">
+      <a class="brand-block" href="index.html">
+        <div class="brand-icon-sq">&alpha;</div>
+        <div class="brand-title">ALPHAGH</div>
+      </a>
+      <button class="mobile-drawer-close" id="btn-mobile-close" aria-label="메뉴 닫기">&times;</button>
+    </div>
+
+    <div class="mobile-drawer-body">
+      <!-- Left Vertical Category Nav Tabs -->
+      <div class="mobile-drawer-left-nav">
+        <button class="mobile-nav-item active" data-target="m-cat-test">국어평가</button>
+        <button class="mobile-nav-item" data-target="m-cat-cert">인증시험</button>
+        <button class="mobile-nav-item" data-target="m-cat-study">학습 도구</button>
+        <button class="mobile-nav-item" data-target="m-cat-wrong">오답노트</button>
+
+        <div class="mobile-drawer-bottom-login">
+          <button class="btn-mobile-login" id="btn-mobile-login-action">시험 시작</button>
+        </div>
+      </div>
+
+      <!-- Right Detail Panels -->
+      <div class="mobile-drawer-right-content">
+        <!-- 1. Test Subcategories -->
+        <div class="mobile-panel-section active" id="m-cat-test">
+          <h4 class="mobile-panel-title">중세국어 평가 문제</h4>
+          <ul class="mobile-menu-list">
+            <li><a href="#" class="mobile-menu-link" data-action="all-problems">모든 문제 (500제)</a></li>
+            <li><a href="#" class="mobile-menu-link" data-action="basic-problems">기초 문제 (실전 20제)</a></li>
+            <li><a href="#" class="mobile-menu-link" data-action="intro-problems">입문 문제</a></li>
+          </ul>
+
+          <div class="mobile-promo-banner">
+            <div class="mobile-promo-badge">실전 진단</div>
+            <h5 class="mobile-promo-title">중세국어 500제 문제은행</h5>
+            <p class="mobile-promo-desc">기출문제와 해설을 모바일에서 즉시 풀어보세요.</p>
+            <a href="#" class="mobile-promo-btn" data-action="all-problems">전체 문제 바로가기 &gt;</a>
+          </div>
+        </div>
+
+        <!-- 2. Cert & Special Modes -->
+        <div class="mobile-panel-section" id="m-cat-cert">
+          <h4 class="mobile-panel-title">역량 진단 & 인증</h4>
+          <ul class="mobile-menu-list">
+            <li><a href="#" class="mobile-menu-link" data-action="cert">국어학 역량인증시험</a></li>
+            <li><a href="#" class="mobile-menu-link" data-action="infinite">무한 챌린지 모드</a></li>
+            <li><a href="#" class="mobile-menu-link" data-action="weakness">취약 영역 정밀 클리닉</a></li>
+          </ul>
+        </div>
+
+        <!-- 3. Learning Tools -->
+        <div class="mobile-panel-section" id="m-cat-study">
+          <h4 class="mobile-panel-title">학습 도구</h4>
+          <ul class="mobile-menu-list">
+            <li><a href="#" class="mobile-menu-link" data-action="combiner">합자해 자모 조합기</a></li>
+            <li><a href="#" class="mobile-menu-link" data-action="corpus">15세기 원문 아카이브</a></li>
+          </ul>
+        </div>
+
+        <!-- 4. Wrong Answers -->
+        <div class="mobile-panel-section" id="m-cat-wrong">
+          <h4 class="mobile-panel-title">오답 및 복습</h4>
+          <ul class="mobile-menu-list">
+            <li><a href="#" class="mobile-menu-link" data-action="review">오답노트 복습 훈련</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content Shell -->
+  <main id="app-root" role="main">
+    <!-- Rendered dynamically by js/app.bundle.js -->
+  </main>
+
+  <!-- Programmers Multi-Column Footer -->
+  <footer class="site-footer">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <h4>서비스</h4>
+        <ul>
+          <li><a href="#" class="nav-tab-btn-footer" data-tab="exam">실전 모의고사 20제</a></li>
+          <li><a href="#" class="nav-tab-btn-footer" data-tab="catalog">중세국어 500제 전체 문제은행</a></li>
+          <li><a href="#" class="nav-tab-btn-footer" data-tab="combiner">훈민정음 합자해 자모 조합기</a></li>
+          <li><a href="#" class="nav-tab-btn-footer" data-tab="corpus">15세기 원문 아카이브</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>학술 및 교육</h4>
+        <ul>
+          <li><a href="#">국립국어원 표준 문헌 DB</a></li>
+          <li><a href="#">훈민정음 해례본 제자해 분석</a></li>
+          <li><a href="#">동국정운 한자음 표기 체계</a></li>
+          <li><a href="#">KS X 1026-1 옛한글 정보처리</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>국어학 역량평가원</h4>
+        <p style="font-size: 0.85rem; line-height: 1.6; margin-bottom: 0.75rem;">
+          세종대왕의 훈민정음 창제 원리와 중세국어 문법을 총망라한 500문항 국가 표준 평가 시스템입니다.
+        </p>
+        <div style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-muted);">
+          고객센터: 1533-1446 (평일 09:00 ~ 18:00)
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>2026 훈민정음 국어학 평가원 | 서울특별시 종로구 세종대로 훈민정음 학술연구소 | 대표전화 1533-1446</p>
+      <p style="margin-top: 0.25rem;">
+        본 사이트의 500제 문항 및 언어학 자료는 국립국어원 표준 규격 및 KS X 1026-1 유니코드 첫가끝 조합형 표준에 따라 엄격하게 검증되었습니다.
+      </p>
+    </div>
+  </footer>
+
+  <!-- Standalone Universal App Bundle -->
+  <script src="js/app.bundle.js"></script>
+</body>
+
+</html>

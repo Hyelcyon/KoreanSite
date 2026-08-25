@@ -1,0 +1,92 @@
+/* Local Full-GSUB Old Hangul Web Fonts (Offline High-Performance Guarantee) */
+@font-face {
+  font-family: "NanumMyeongjoYetHangul";
+  src: url("../fonts/NanumMyeongjo-YetHangul.woff2") format("woff2"),
+       url("../fonts/NanumMyeongjo-YetHangul.woff") format("woff"),
+       url("https://hangeul.pstatic.net/hangeul_static/webfont/NanumMyeongjoYetHangul/NanumMyeongjo-YetHangul.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: block;
+}
+
+@font-face {
+  font-family: "NanumBarunGothicYetHangul";
+  src: url("../fonts/NanumBarunGothic-YetHangul.woff2") format("woff2"),
+       url("https://hangeul.pstatic.net/hangeul_static/webfont/NanumBarunGothicYetHangul/NanumBarunGothic-YetHangul.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: block;
+}
+
+/* Programmers 2026 Rich Gradient Design System */
+:root {
+  /* Surfaces */
+  --bg-canvas: #ffffff;
+  --bg-subtle: #f8f9fa;
+  --surface-1: #ffffff;
+  --surface-2: #f8f9fa;
+  --surface-3: #f1f3f5;
+  --surface-dark: #0c1527;
+  --surface-hero: #0f1c34;
+
+  /* Borders & Dividers */
+  --border-subtle: #eaedef;
+  --border-medium: #dee2e6;
+  --border-strong: #ced4da;
+
+  /* Typography */
+  --text-primary: #1e293b;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
+  --text-disabled: #cbd5e1;
+  --text-inverse: #ffffff;
+
+  /* Programmers Electric Royal Blue */
+  --accent-primary: #0066ff;
+  --accent-hover: #0052e6;
+  --accent-active: #0041b8;
+  --accent-subtle: rgba(0, 102, 255, 0.08);
+  --accent-glow: rgba(0, 102, 255, 0.28);
+  --accent-gradient: linear-gradient(135deg, #0052e6 0%, #0066ff 50%, #00a3ff 100%);
+
+  /* Rich Hero Gradients (Slide-based) */
+  --gradient-hero-dark: radial-gradient(circle at 80% 30%, rgba(59, 130, 246, 0.28) 0%, rgba(12, 21, 39, 0) 65%), linear-gradient(135deg, #09101d 0%, #101c33 50%, #0c1527 100%);
+  --gradient-hero-silver: radial-gradient(circle at 75% 35%, rgba(245, 158, 11, 0.18) 0%, rgba(255, 255, 255, 0) 60%), linear-gradient(125deg, #8e95a0 0%, #a4abb7 35%, #b8af9f 70%, #828a96 100%);
+  --gradient-hero-indigo: radial-gradient(circle at 75% 30%, rgba(139, 92, 246, 0.35) 0%, rgba(12, 21, 39, 0) 65%), linear-gradient(135deg, #0b0f19 0%, #1e1b4b 55%, #0c1527 100%);
+  --gradient-hero-teal: radial-gradient(circle at 80% 30%, rgba(20, 184, 166, 0.3) 0%, rgba(12, 21, 39, 0) 65%), linear-gradient(135deg, #061e1b 0%, #064e3b 55%, #0c1527 100%);
+  --gradient-hero-amber: radial-gradient(circle at 80% 30%, rgba(245, 158, 11, 0.28) 0%, rgba(12, 21, 39, 0) 65%), linear-gradient(135deg, #241405 0%, #582a08 55%, #0c1527 100%);
+
+  /* Rich Card Gradients */
+  --gradient-blue-card: radial-gradient(circle at 90% 10%, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0) 55%), linear-gradient(112deg, #004bd4 0%, #0066ff 48%, #0088ff 100%);
+  --gradient-dark-strip: linear-gradient(135deg, #111e33 0%, #172640 50%, #0e1726 100%);
+
+  /* Status Badges */
+  --status-success: #00c471;
+  --status-success-bg: rgba(0, 196, 113, 0.08);
+  --status-error: #f04438;
+  --status-error-bg: rgba(240, 68, 56, 0.08);
+  --status-warning: #f79009;
+  --status-warning-bg: rgba(247, 144, 9, 0.08);
+  --status-cyan: #06b6d4;
+  --status-cyan-bg: rgba(6, 182, 212, 0.08);
+
+  /* Shadows */
+  --shadow-elevation-1: 0 1px 3px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04);
+  --shadow-elevation-2: 0 4px 16px rgba(15, 23, 42, 0.08), 0 2px 6px rgba(15, 23, 42, 0.04);
+  --shadow-elevation-3: 0 16px 36px rgba(15, 23, 42, 0.12), 0 4px 12px rgba(15, 23, 42, 0.06);
+
+  /* Motion Curves */
+  --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-fast: 140ms;
+  --duration-normal: 220ms;
+  --duration-slow: 350ms;
+
+  /* Typography Font Stacks */
+  --font-sans: "NanumBarunGothicYetHangul", "Plus Jakarta Sans", "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-serif: "NanumMyeongjoYetHangul", "NanumBarunGothicYetHangul", "Noto Serif KR", "Batang", serif;
+  --font-mono: "JetBrains Mono", "SF Mono", monospace;
+
+  /* Layout Widths */
+  --max-width-app: 1200px;
+  --max-width-reading: 820px;
+}
