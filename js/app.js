@@ -94,7 +94,7 @@ class App {
       }
 
       // Option Selection in Quiz
-      const optionBtn = target.closest('.option-item');
+      const optionBtn = target.closest('.quiz-option-tile, .option-item');
       if (optionBtn && !appState.isAnswered) {
         const index = parseInt(optionBtn.getAttribute('data-index'), 10);
         appState.answerCurrentQuestion(index);

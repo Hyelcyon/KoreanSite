@@ -1581,3 +1581,18 @@ body {
   color: var(--text-muted);
   line-height: 1.65;
 }
+@media (max-width: 860px) {
+  .quiz-split-layout {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    padding: 1.25rem 1rem 8rem;
+  }
+  .drawer-content-inner {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+  .drawer-actions {
+    justify-content: flex-end;
+  }
+}

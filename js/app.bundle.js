@@ -651,7 +651,7 @@
         </div>
       `;
     },
-    renderQuiz() {
+renderQuiz() {
       const root = this.getRoot();
       if (!root) return;
       const q = State.getCurrentQuestion();
@@ -670,40 +670,54 @@
       if (q.difficulty === '고급') diffBadge = '<span class="badge badge-level-3">Lv.3 고급</span>';
 
       root.innerHTML = `
-        <div class="quiz-container">
-          <div class="quiz-header-bar">
-            <div style="display: flex; align-items: center; gap: 0.45rem; font-size: 0.82rem; color: var(--text-secondary);">
-              <span style="font-weight: 700; color: var(--accent-primary);">문제 풀이</span>
-              <span>&gt;</span>
-              <span>${q.category}</span>
+        <div class="quiz-session-header">
+          <div class="quiz-nav-breadcrumbs">
+            <span class="crumb-highlight">평가</span>
+            <span>&rsaquo;</span>
+            <span>${q.category}</span>
+            <span>&rsaquo;</span>
+            <span style="color: var(--text-muted);">${q.subcategory}</span>
+          </div>
+          <div class="quiz-session-controls">
+            <div class="quiz-timer-pill" id="session-timer">00:00</div>
+            <button class="btn btn-outline btn-sm" id="btn-toggle-bookmark" style="font-size: 0.78rem; padding: 0.25rem 0.65rem;">
+              ${isBookmarked ? '북마크 해제' : '북마크'}
+            </button>
+            <button class="btn btn-outline btn-sm" id="btn-back-to-catalog" style="font-size: 0.78rem; padding: 0.25rem 0.65rem;">
+              종료
+            </button>
+          </div>
+        </div>
+
+        <div class="quiz-progress-track">
+          <div class="quiz-progress-fill" style="width: ${progressPercent}%;"></div>
+        </div>
+
+        <div class="quiz-split-layout">
+          <!-- Left Column: Academic Passage & Problem Thesis -->
+          <div class="quiz-left-pane">
+            <div class="quiz-meta-strip">
+              <span class="quiz-question-number">문항 ${currentNum} / ${totalInSession}</span>
+              <span class="badge badge-category">${q.category}</span>
+              ${diffBadge}
             </div>
-            <div style="display: flex; align-items: center; gap: 0.5rem;">
-              <span id="session-timer" style="font-family: var(--font-mono); font-size: 0.85rem; font-weight: 700; color: var(--accent-primary); background: var(--accent-subtle); padding: 0.2rem 0.55rem; border-radius: 6px;">
-                00:00
-              </span>
-              <button class="btn btn-outline btn-sm" id="btn-toggle-bookmark" style="font-size: 0.78rem; padding: 0.25rem 0.65rem;">
-                ${isBookmarked ? '북마크 해제' : '북마크'}
-              </button>
+
+            <h2 class="quiz-question-title">${q.question}</h2>
+
+            <div class="quiz-passage-block">
+              15세기 훈민정음 원문 및 국어학 표준 규격에 따라 해당 문항의 음운·형태·문헌적 특징을 종합적으로 판정하십시오.
+              <span class="quiz-citation-source">출처: 국립국어원 표준 문헌 DB &middot; KS X 1026-1 옛한글 규격</span>
             </div>
           </div>
 
-          <div class="quiz-progress-bar">
-            <div class="quiz-progress-fill" style="width: ${progressPercent}%;"></div>
-          </div>
-
-          <div class="question-card">
-            <div class="question-header">
-              <div class="question-meta">
-                <span class="question-number">문제 ${currentNum} / ${totalInSession}</span>
-                <span class="badge badge-category">${q.category}</span>
-                ${diffBadge}
-                <span class="question-sub-tag">${q.subcategory}</span>
-              </div>
+          <!-- Right Column: Interactive Option Keypad Console -->
+          <div class="quiz-right-pane">
+            <div class="quiz-options-header">
+              <span>정답 선택</span>
+              <span class="quiz-shortcut-badge">1~4번 키</span>
             </div>
 
-            <h2 class="question-title">${q.question}</h2>
-
-            <div class="options-list" id="options-container">
+            <div class="quiz-options-list" id="options-container">
               ${q.options
                 .map((opt, idx) => {
                   let stateClass = '';
@@ -712,44 +726,33 @@
                     else if (idx === State.selectedOption) stateClass = 'incorrect';
                   }
                   return `
-                    <button class="option-item ${stateClass}" data-index="${idx}" ${State.isAnswered ? 'disabled' : ''}>
-                      <span class="option-key">${idx + 1}</span>
-                      <span class="option-text">${opt}</span>
+                    <button class="quiz-option-tile ${stateClass}" data-index="${idx}" ${State.isAnswered ? 'disabled' : ''}>
+                      <span class="option-kbd">${idx + 1}</span>
+                      <span class="option-text-editorial">${opt}</span>
                     </button>
                   `;
                 })
                 .join('')}
             </div>
+          </div>
+        </div>
 
-            ${
-              State.isAnswered
-                ? `
-                <div class="explanation-box">
-                  <div class="explanation-header-row">
-                    <div class="explanation-title">
-                      ${State.selectedOption === q.answer ? '정답입니다' : '오답입니다 (정답: ' + (q.answer + 1) + '번)'}
-                    </div>
-                    <div style="display: flex; gap: 0.4rem;">
-                      ${
-                        currentNum < totalInSession
-                          ? `<button class="btn btn-primary btn-sm" id="btn-next-question" style="font-size: 0.82rem; padding: 0.4rem 0.85rem;">다음 문제 풀기 &rarr;</button>`
-                          : `
-                          <button class="btn btn-primary btn-sm" id="btn-finish-quiz" style="font-size: 0.82rem; padding: 0.4rem 0.85rem;">다음 문제 풀기 &rarr;</button>
-                          <button class="btn btn-outline btn-sm" id="btn-back-to-catalog" style="font-size: 0.82rem; padding: 0.4rem 0.75rem;">돌아가기</button>
-                        `
-                      }
-                    </div>
-                  </div>
-                  <div class="explanation-text">${q.explanation}</div>
-                </div>
-              `
-                : `
-                <div class="quiz-bottom-bar">
-                  <span class="quiz-shortcut-hint">키보드 1~4 번으로 즉시 선택 가능</span>
-                  <button class="btn btn-outline btn-sm" id="btn-back-to-catalog">돌아가기</button>
-                </div>
-              `
-            }
+        <!-- Bottom-Docked Sliding Explanation Drawer (Zero CLS) -->
+        <div class="quiz-drawer-dock ${State.isAnswered ? 'show' : ''}" id="quiz-explanation-drawer">
+          <div class="drawer-content-inner">
+            <div class="drawer-left-info">
+              <div class="drawer-verdict ${State.selectedOption === q.answer ? 'correct' : 'incorrect'}">
+                ${State.selectedOption === q.answer ? '정답입니다' : '오답입니다 (정답: ' + (q.answer + 1) + '번)'}
+              </div>
+              <div class="drawer-explanation-text">${q.explanation}</div>
+            </div>
+            <div class="drawer-actions">
+              ${
+                currentNum < totalInSession
+                  ? `<button class="btn btn-primary" id="btn-next-question">다음 문항 풀기 <kbd class="kbd-inline">Enter ↵</kbd></button>`
+                  : `<button class="btn btn-primary" id="btn-finish-quiz">성적표 종합 분석 보기 <kbd class="kbd-inline">Enter ↵</kbd></button>`
+              }
+            </div>
           </div>
         </div>
       `;
@@ -1773,7 +1776,7 @@
         }
 
         // Quiz Option Selection
-        const optionBtn = target.closest('.option-item');
+        const optionBtn = target.closest('.quiz-option-tile, .option-item');
         if (optionBtn && !State.isAnswered) {
           const index = parseInt(optionBtn.getAttribute('data-index'), 10);
           State.answerCurrentQuestion(index);
