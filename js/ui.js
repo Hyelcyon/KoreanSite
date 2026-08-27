@@ -110,15 +110,51 @@ export const UI = {
       if (q.difficulty === '중급') diffBadge = '<span class="badge badge-level-2">Lv.2 중급</span>';
       if (q.difficulty === '고급') diffBadge = '<span class="badge badge-level-3">Lv.3 고급</span>';
 
+      // Build dynamic contextual breadcrumb hierarchy
+      const routeTitle = appState.routeSource || '실전 모의고사 (20제)';
+      let routeHtml = '';
+      if (appState.mode === 'single') {
+        routeHtml = `
+          <a href="#" class="crumb-link crumb-route" data-crumb="catalog">문제 검색</a>
+          <span class="crumb-sep">&rsaquo;</span>
+          <a href="#" class="crumb-link crumb-category" data-crumb="category" data-cat="${q.category}">${q.category}</a>
+          <span class="crumb-sep">&rsaquo;</span>
+          <span class="crumb-current">${q.subcategory} (${q.id}번 문항)</span>
+        `;
+      } else if (appState.mode === 'category') {
+        routeHtml = `
+          <a href="#" class="crumb-link crumb-category" data-crumb="category" data-cat="${q.category}">${q.category}</a>
+          <span class="crumb-sep">&rsaquo;</span>
+          <span class="crumb-current">${q.subcategory}</span>
+        `;
+      } else if (appState.mode === 'review') {
+        routeHtml = `
+          <a href="#" class="crumb-link crumb-route" data-crumb="review">오답노트</a>
+          <span class="crumb-sep">&rsaquo;</span>
+          <span class="crumb-current">${q.category} &middot; ${q.subcategory}</span>
+        `;
+      } else {
+        routeHtml = `
+          <span class="crumb-route-badge">${routeTitle}</span>
+          <span class="crumb-sep">&rsaquo;</span>
+          <a href="#" class="crumb-link crumb-category" data-crumb="category" data-cat="${q.category}">${q.category}</a>
+          <span class="crumb-sep">&rsaquo;</span>
+          <span class="crumb-current">${q.subcategory}</span>
+        `;
+      }
+
       root.innerHTML = `
         <div class="quiz-session-header">
-          <div class="quiz-nav-breadcrumbs">
-            <span class="crumb-highlight">평가</span>
-            <span>&rsaquo;</span>
-            <span>${q.category}</span>
-            <span>&rsaquo;</span>
-            <span style="color: var(--text-muted);">${q.subcategory}</span>
-          </div>
+          <nav class="quiz-nav-breadcrumbs" aria-label="문항 위치">
+            <a href="#" class="crumb-link crumb-home" data-crumb="dashboard">
+              <svg class="crumb-home-icon" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
+              </svg>
+              <span>홈</span>
+            </a>
+            <span class="crumb-sep">&rsaquo;</span>
+            ${routeHtml}
+          </nav>
           <div class="quiz-session-controls">
             <div class="quiz-timer-pill" id="session-timer">00:00</div>
             <button class="btn btn-outline btn-sm" id="btn-toggle-bookmark" style="font-size: 0.78rem; padding: 0.25rem 0.65rem;">
@@ -156,11 +192,6 @@ export const UI = {
 
           <!-- Right Column: Unified Options & Academic Commentary -->
           <div class="quiz-right-pane">
-            <div class="quiz-options-header">
-              <span>정답 선택</span>
-              <span class="quiz-shortcut-badge">키보드 1~4번</span>
-            </div>
-
             <!-- Unified Option Group -->
             <div class="quiz-unified-options" id="options-container">
               ${q.options
@@ -215,11 +246,7 @@ export const UI = {
                   <div class="feedback-commentary-body">${q.explanation}</div>
                 </div>
               `
-                : `
-                <div class="quiz-hint-row">
-                  <span>키보드 1~4번 숫자를 눌러 즉시 선택할 수 있습니다.</span>
-                </div>
-              `
+                : ''
             }
           </div>
         </div>

@@ -43,7 +43,13 @@ class App {
     document.querySelectorAll('.nav-tab-btn').forEach((btn) => {
       btn.addEventListener('click', (e) => {
         const tab = e.currentTarget.getAttribute('data-tab');
-        this.switchTab(tab);
+        if (tab === 'exam' || tab === 'korean-home') {
+          this.switchTab('korean-home');
+        } else if (tab === 'info' || tab === 'info-home') {
+          this.switchTab('info-home');
+        } else {
+          this.switchTab(tab);
+        }
       });
     });
 
@@ -55,7 +61,13 @@ class App {
       const navBtn = target.closest('.nav-tab-btn');
       if (navBtn) {
         const tab = navBtn.getAttribute('data-tab');
-        this.switchTab(tab);
+        if (tab === 'exam' || tab === 'korean-home') {
+          this.switchTab('korean-home');
+        } else if (tab === 'info' || tab === 'info-home') {
+          this.switchTab('info-home');
+        } else {
+          this.switchTab(tab);
+        }
         return;
       }
 
@@ -239,14 +251,6 @@ class App {
       if (['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) return;
 
       if (appState.view === 'quiz') {
-        // Option selection (1-4)
-        if (['1', '2', '3', '4'].includes(e.key) && !appState.isAnswered) {
-          const index = parseInt(e.key, 10) - 1;
-          appState.answerCurrentQuestion(index);
-          UI.renderQuiz();
-          return;
-        }
-
         // Enter or Space for Next Question
         if (['Enter', ' '].includes(e.key) && appState.isAnswered) {
           e.preventDefault();
