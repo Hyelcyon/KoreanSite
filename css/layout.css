@@ -143,26 +143,26 @@ body {
 .nav-tab-btn::after {
   content: '';
   position: absolute;
-  bottom: -1px;
-  left: 0.85rem;
-  right: 0.85rem;
-  height: 4.5px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px !important;
   background-color: #0f172a;
   border-radius: 0;
   opacity: 0;
-  transform: scaleX(0.4);
-  transition: opacity var(--duration-fast) var(--ease-spring),
-    transform var(--duration-fast) var(--ease-spring),
-    background-color var(--duration-fast);
+  transform: scaleX(0);
+  transform-origin: center bottom;
+  transition: opacity 140ms ease, transform 140ms ease;
+  z-index: 101;
+  pointer-events: none;
 }
 
 .nav-tab-btn:hover {
   color: #0f172a;
-  font-weight: 700;
 }
 
 .nav-tab-btn:hover::after {
-  opacity: 0.85;
+  opacity: 1;
   transform: scaleX(1);
 }
 
@@ -171,9 +171,14 @@ body {
   font-weight: 700;
 }
 
-.nav-tab-btn.active::after {
-  opacity: 1;
-  transform: scaleX(1);
+.nav-tab-btn.active::after,
+.nav-tab-btn.active:hover::after,
+.nav-item-dropdown-wrap:hover .nav-tab-btn.active::after,
+.mega-dropdown-panel:hover ~ .nav-tab-btn.active::after {
+  opacity: 1 !important;
+  transform: scaleX(1) !important;
+  height: 3px !important;
+  bottom: 0 !important;
 }
 
 .nav-badge-pill {
@@ -213,7 +218,7 @@ body {
 }
 
 /* ============================================================
-   Programmers Smooth Sliding White Mega Dropdown Menu
+   Parchment Unrolling Mega Dropdown Menu (양피지 펼침 효과)
    ============================================================ */
 .mega-dropdown-panel {
   position: absolute;
@@ -221,30 +226,33 @@ body {
   left: 0;
   width: 100vw;
   background: #ffffff;
-  border-bottom: 1px solid var(--border-subtle);
-  box-shadow: 0 24px 50px rgba(15, 23, 42, 0.12);
+  border-top: none;
+  border-bottom: 2px solid var(--border-medium);
+  box-shadow: 0 24px 48px -12px rgba(15, 23, 42, 0.16);
   opacity: 0;
   visibility: hidden;
   max-height: 0;
   overflow: hidden;
+  clip-path: inset(0 0 100% 0);
   transform-origin: top center;
-  transform: translateY(-16px);
-  transition: max-height 0.75s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.75s cubic-bezier(0.16, 1, 0.3, 1),
-              opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1),
-              visibility 0.75s;
+  transform: scaleY(0.96);
+  transition: clip-path 0.38s cubic-bezier(0.16, 1, 0.3, 1),
+              max-height 0.42s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.38s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.28s ease,
+              visibility 0.4s;
   pointer-events: none;
   z-index: 99;
 }
 
-/* Invisible hover bridge at top of panel to catch fast mouse movement */
+/* Hover bridge right at bottom boundary */
 .mega-dropdown-panel::before {
   content: '';
   position: absolute;
-  top: -12px;
+  top: -8px;
   left: 0;
   width: 100%;
-  height: 12px;
+  height: 8px;
   background: transparent;
   pointer-events: auto;
 }
@@ -254,7 +262,8 @@ body {
   opacity: 1;
   visibility: visible;
   max-height: 480px;
-  transform: translateY(0);
+  clip-path: inset(0 0 0% 0);
+  transform: scaleY(1);
   pointer-events: auto;
 }
 
@@ -276,7 +285,7 @@ body {
   margin: 0 auto;
   padding: 2.25rem 2rem 2.5rem 2rem;
   display: grid;
-  grid-template-columns: 1.15fr 1fr 1.35fr;
+  grid-template-columns: 1fr 1.35fr;
   gap: 2.5rem;
   align-items: flex-start;
   opacity: 1;
@@ -312,27 +321,28 @@ body {
   font-weight: 500;
   color: var(--text-secondary);
   text-decoration: none;
-  transition: color var(--duration-fast), transform var(--duration-fast);
+  transition: color var(--duration-fast);
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
 }
 
-.mega-link-arrow {
-  display: none;
-  font-weight: 700;
+/* 마우스 호버 시: 화살표 없이 파란색 폰트만 변경 */
+.mega-link:hover {
   color: var(--accent-primary);
+  font-weight: 600;
 }
 
-.mega-link:hover,
+/* 현재 들어와있는(활성화된) 메뉴: 화살표 표시 + 파란색 폰트 */
 .mega-link.active {
   color: var(--accent-primary);
   font-weight: 700;
-  transform: translateX(2px);
 }
 
-.mega-link:hover .mega-link-arrow,
-.mega-link.active .mega-link-arrow {
+.mega-link.active::before {
+  content: '→ ';
+  font-weight: 700;
+  color: var(--accent-primary);
+  margin-right: 0.35rem;
   display: inline-block;
 }
 
@@ -1291,7 +1301,7 @@ body {
   background-color: #ffffff;
   color: #191f28;
   font-weight: 800;
-  box-shadow: inset 3px 0 0 0 var(--accent-primary);
+  box-shadow: inset 3px 0 0 0 #0f172a;
 }
 
 .mobile-drawer-bottom-login {

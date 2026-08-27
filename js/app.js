@@ -94,7 +94,7 @@ class App {
       }
 
       // Option Selection in Quiz
-      const optionBtn = target.closest('.quiz-option-tile, .option-item');
+      const optionBtn = target.closest('.quiz-option-row, .quiz-option-tile, .option-item');
       if (optionBtn && !appState.isAnswered) {
         const index = parseInt(optionBtn.getAttribute('data-index'), 10);
         appState.answerCurrentQuestion(index);
@@ -111,8 +111,9 @@ class App {
 
       // Finish Quiz
       if (target.closest('#btn-finish-quiz')) {
-        const record = appState.finishSession();
-        UI.renderResult(record);
+        appState.finishSession();
+        appState.view = 'dashboard';
+        this.switchTab('dashboard');
         return;
       }
 
@@ -255,8 +256,9 @@ class App {
             appState.nextQuestion();
             UI.renderQuiz();
           } else {
-            const record = appState.finishSession();
-            UI.renderResult(record);
+            appState.finishSession();
+            appState.view = 'dashboard';
+            this.switchTab('dashboard');
           }
           return;
         }

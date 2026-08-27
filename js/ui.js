@@ -122,7 +122,7 @@ export const UI = {
           <div class="quiz-session-controls">
             <div class="quiz-timer-pill" id="session-timer">00:00</div>
             <button class="btn btn-outline btn-sm" id="btn-toggle-bookmark" style="font-size: 0.78rem; padding: 0.25rem 0.65rem;">
-              ${isBookmarked ? '북마크 해제' : '북마크'}
+              ${isBookmarked ? '북마크됨' : '북마크'}
             </button>
             <button class="btn btn-outline btn-sm" id="btn-back-to-catalog" style="font-size: 0.78rem; padding: 0.25rem 0.65rem;">
               종료
@@ -145,55 +145,82 @@ export const UI = {
 
             <h2 class="quiz-question-title">${q.question}</h2>
 
-            <div class="quiz-passage-block">
-              15세기 훈민정음 원문 및 국어학 표준 규격에 따라 해당 문항의 음운·형태·문헌적 특징을 종합적으로 판정하십시오.
-              <span class="quiz-citation-source">출처: 국립국어원 표준 문헌 DB &middot; KS X 1026-1 옛한글 규격</span>
+            <div class="quiz-context-bar">
+              <span class="context-tag-label">문헌 출처</span>
+              <span class="context-tag-value">국립국어원 표준 문헌 DB &middot; KS X 1026-1</span>
+              <span class="context-sep">/</span>
+              <span class="context-tag-label">평가 영역</span>
+              <span class="context-tag-value">${q.subcategory}</span>
             </div>
           </div>
 
-          <!-- Right Column: Interactive Option Keypad Console -->
+          <!-- Right Column: Unified Options & Academic Commentary -->
           <div class="quiz-right-pane">
             <div class="quiz-options-header">
               <span>정답 선택</span>
-              <span class="quiz-shortcut-badge">1~4번 키</span>
+              <span class="quiz-shortcut-badge">키보드 1~4번</span>
             </div>
 
-            <div class="quiz-options-list" id="options-container">
+            <!-- Unified Option Group -->
+            <div class="quiz-unified-options" id="options-container">
               ${q.options
                 .map((opt, idx) => {
                   let stateClass = '';
+                  let tagBadge = '';
                   if (appState.isAnswered) {
-                    if (idx === q.answer) stateClass = 'correct';
-                    else if (idx === appState.selectedOption) stateClass = 'incorrect';
+                    if (idx === q.answer) {
+                      stateClass = 'option-correct';
+                      tagBadge = '<span class="option-status-tag tag-correct">정답</span>';
+                    } else if (idx === appState.selectedOption) {
+                      stateClass = 'option-incorrect';
+                      tagBadge = '<span class="option-status-tag tag-incorrect">선택 오답</span>';
+                    } else {
+                      stateClass = 'option-dimmed';
+                    }
                   }
+                  const numLabel = ['①', '②', '③', '④', '⑤'][idx] || (idx + 1);
                   return `
-                    <button class="quiz-option-tile ${stateClass}" data-index="${idx}" ${appState.isAnswered ? 'disabled' : ''}>
-                      <span class="option-kbd">${idx + 1}</span>
-                      <span class="option-text-editorial">${opt}</span>
+                    <button class="quiz-option-row ${stateClass}" data-index="${idx}" ${appState.isAnswered ? 'disabled' : ''}>
+                      <span class="option-circle-num">${numLabel}</span>
+                      <span class="option-row-text">${opt}</span>
+                      ${tagBadge}
                     </button>
                   `;
                 })
                 .join('')}
             </div>
-          </div>
-        </div>
 
-        <!-- Bottom-Docked Sliding Explanation Drawer (Zero CLS) -->
-        <div class="quiz-drawer-dock ${appState.isAnswered ? 'show' : ''}" id="quiz-explanation-drawer">
-          <div class="drawer-content-inner">
-            <div class="drawer-left-info">
-              <div class="drawer-verdict ${appState.selectedOption === q.answer ? 'correct' : 'incorrect'}">
-                ${appState.selectedOption === q.answer ? '정답입니다' : '오답입니다 (정답: ' + (q.answer + 1) + '번)'}
-              </div>
-              <div class="drawer-explanation-text">${q.explanation}</div>
-            </div>
-            <div class="drawer-actions">
-              ${
-                currentNum < totalInSession
-                  ? `<button class="btn btn-primary" id="btn-next-question">다음 문항 풀기 <kbd class="kbd-inline">Enter ↵</kbd></button>`
-                  : `<button class="btn btn-primary" id="btn-finish-quiz">성적표 종합 분석 보기 <kbd class="kbd-inline">Enter ↵</kbd></button>`
-              }
-            </div>
+            ${
+              appState.isAnswered
+                ? `
+                <!-- Clean Unboxed Editorial Commentary Strip -->
+                <div class="quiz-feedback-strip">
+                  <div class="feedback-header-line">
+                    <div class="feedback-verdict-group">
+                      <span class="feedback-verdict-pill ${appState.selectedOption === q.answer ? 'pill-correct' : 'pill-incorrect'}">
+                        ${appState.selectedOption === q.answer ? '정답입니다' : '오답입니다'}
+                      </span>
+                      ${
+                        appState.selectedOption !== q.answer
+                          ? `<span class="feedback-correct-cue">정답: <strong>${['①', '②', '③', '④', '⑤'][q.answer] || (q.answer + 1)}번</strong></span>`
+                          : ''
+                      }
+                    </div>
+                    ${
+                      currentNum < totalInSession
+                        ? `<button class="btn btn-primary" id="btn-next-question" style="padding: 0.5rem 1.15rem; font-size: 0.88rem;">다음 문항 풀기 <kbd class="kbd-inline">Enter ↵</kbd></button>`
+                        : `<button class="btn btn-primary" id="btn-finish-quiz" style="padding: 0.5rem 1.15rem; font-size: 0.88rem;">평가 결과 리포트 확인 <kbd class="kbd-inline">Enter ↵</kbd></button>`
+                    }
+                  </div>
+                  <div class="feedback-commentary-body">${q.explanation}</div>
+                </div>
+              `
+                : `
+                <div class="quiz-hint-row">
+                  <span>키보드 1~4번 숫자를 눌러 즉시 선택할 수 있습니다.</span>
+                </div>
+              `
+            }
           </div>
         </div>
       `;

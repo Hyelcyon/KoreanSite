@@ -349,8 +349,24 @@
     finishSession() {
       this.stopTimer();
       this.clearSessionStorage();
-      this.view = 'catalog';
-      return null;
+      this.view = 'result';
+
+      const total = this.userAnswers.length;
+      const correctCount = this.userAnswers.filter((a) => a.isCorrect).length;
+      const percentage = total > 0 ? Math.round((correctCount / total) * 100) : 0;
+
+      const record = {
+        date: new Date().toISOString(),
+        mode: this.mode,
+        category: this.activeCategory,
+        total,
+        correctCount,
+        percentage,
+        elapsedSeconds: this.elapsedSeconds
+      };
+
+      Storage.saveExamResult(record);
+      return record;
     }
   };
 
@@ -455,7 +471,6 @@
                 <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
               </div>
               <span class="quick-icon-label">역량인증시험</span>
-            </div>
           </div>
         </div>
 
@@ -633,21 +648,7 @@
             </div>
           </div>
 
-          <!-- Certification Promo Bar -->
-          <div class="cert-promo-strip">
-            <div>
-              <div style="font-size: 0.85rem; color: #93c5fd; font-weight: 700; margin-bottom: 0.35rem;">
-                국가 공인 국어학 평가 인증
-              </div>
-              <h3 class="cert-promo-title">
-                중세국어 역량 평가 1위 훈민정음 평가원에서 만든<br />
-                자격증 취득에 도전해보세요!
-              </h3>
-            </div>
-            <button class="btn-cert-outline" id="btn-cert-action">
-              역량인증자격증 자세히 알아보기 &rarr;
-            </button>
-          </div>
+
         </div>
       `;
     },
@@ -704,57 +705,86 @@ renderQuiz() {
 
             <h2 class="quiz-question-title">${q.question}</h2>
 
-            <div class="quiz-passage-block">
-              15세기 훈민정음 원문 및 국어학 표준 규격에 따라 해당 문항의 음운·형태·문헌적 특징을 종합적으로 판정하십시오.
-              <span class="quiz-citation-source">출처: 국립국어원 표준 문헌 DB &middot; KS X 1026-1 옛한글 규격</span>
+            <div class="quiz-context-bar">
+              <span class="context-tag-label">문헌 출처</span>
+              <span class="context-tag-value">국립국어원 표준 문헌 DB &middot; KS X 1026-1</span>
+              <span class="context-sep">/</span>
+              <span class="context-tag-label">평가 영역</span>
+              <span class="context-tag-value">${q.subcategory}</span>
             </div>
           </div>
 
-          <!-- Right Column: Interactive Option Keypad Console -->
+          <!-- Right Column: Unified Options & Academic Commentary -->
           <div class="quiz-right-pane">
             <div class="quiz-options-header">
               <span>정답 선택</span>
-              <span class="quiz-shortcut-badge">1~4번 키</span>
+              <span class="quiz-shortcut-badge">키보드 1~4번</span>
             </div>
 
-            <div class="quiz-options-list" id="options-container">
+            <!-- Unified Option Group -->
+            <div class="quiz-unified-options" id="options-container">
               ${q.options
                 .map((opt, idx) => {
                   let stateClass = '';
+                  let tagBadge = '';
                   if (State.isAnswered) {
-                    if (idx === q.answer) stateClass = 'correct';
-                    else if (idx === State.selectedOption) stateClass = 'incorrect';
+                    if (idx === q.answer) {
+                      stateClass = 'option-correct';
+                      tagBadge = '<span class="option-status-tag tag-correct">정답</span>';
+                    } else if (idx === State.selectedOption) {
+                      stateClass = 'option-incorrect';
+                      tagBadge = '<span class="option-status-tag tag-incorrect">선택 오답</span>';
+                    } else {
+                      stateClass = 'option-dimmed';
+                    }
                   }
+                  const numLabel = ['①', '②', '③', '④', '⑤'][idx] || (idx + 1);
                   return `
-                    <button class="quiz-option-tile ${stateClass}" data-index="${idx}" ${State.isAnswered ? 'disabled' : ''}>
-                      <span class="option-kbd">${idx + 1}</span>
-                      <span class="option-text-editorial">${opt}</span>
+                    <button class="quiz-option-row ${stateClass}" data-index="${idx}" ${State.isAnswered ? 'disabled' : ''}>
+                      <span class="option-circle-num">${numLabel}</span>
+                      <span class="option-row-text">${opt}</span>
+                      ${tagBadge}
                     </button>
                   `;
                 })
                 .join('')}
             </div>
+
+            ${
+              State.isAnswered
+                ? `
+                <!-- Clean Unboxed Editorial Commentary Strip -->
+                <div class="quiz-feedback-strip">
+                  <div class="feedback-header-line">
+                    <div class="feedback-verdict-group">
+                      <span class="feedback-verdict-pill ${State.selectedOption === q.answer ? 'pill-correct' : 'pill-incorrect'}">
+                        ${State.selectedOption === q.answer ? '정답입니다' : '오답입니다'}
+                      </span>
+                      ${
+                        State.selectedOption !== q.answer
+                          ? `<span class="feedback-correct-cue">정답: <strong>${['①', '②', '③', '④', '⑤'][q.answer] || (q.answer + 1)}번</strong></span>`
+                          : ''
+                      }
+                    </div>
+                    ${
+                      currentNum < totalInSession
+                        ? `<button class="btn btn-primary" id="btn-next-question" style="padding: 0.5rem 1.15rem; font-size: 0.88rem;">다음 문항 풀기 <kbd class="kbd-inline">Enter ↵</kbd></button>`
+                        : `<button class="btn btn-primary" id="btn-finish-quiz" style="padding: 0.5rem 1.15rem; font-size: 0.88rem;">평가 결과 리포트 확인 <kbd class="kbd-inline">Enter ↵</kbd></button>`
+                    }
+                  </div>
+                  <div class="feedback-commentary-body">${q.explanation}</div>
+                </div>
+              `
+                : `
+                <div class="quiz-hint-row">
+                  <span>키보드 1~4번 숫자를 눌러 즉시 선택할 수 있습니다.</span>
+                </div>
+              `
+            }
           </div>
         </div>
 
-        <!-- Bottom-Docked Sliding Explanation Drawer (Zero CLS) -->
-        <div class="quiz-drawer-dock ${State.isAnswered ? 'show' : ''}" id="quiz-explanation-drawer">
-          <div class="drawer-content-inner">
-            <div class="drawer-left-info">
-              <div class="drawer-verdict ${State.selectedOption === q.answer ? 'correct' : 'incorrect'}">
-                ${State.selectedOption === q.answer ? '정답입니다' : '오답입니다 (정답: ' + (q.answer + 1) + '번)'}
-              </div>
-              <div class="drawer-explanation-text">${q.explanation}</div>
-            </div>
-            <div class="drawer-actions">
-              ${
-                currentNum < totalInSession
-                  ? `<button class="btn btn-primary" id="btn-next-question">다음 문항 풀기 <kbd class="kbd-inline">Enter ↵</kbd></button>`
-                  : `<button class="btn btn-primary" id="btn-finish-quiz">성적표 종합 분석 보기 <kbd class="kbd-inline">Enter ↵</kbd></button>`
-              }
-            </div>
-          </div>
-        </div>
+
       `;
     },
     renderResult(record) {
@@ -808,7 +838,6 @@ renderQuiz() {
                   `;
                 })
                 .join('')}
-            </div>
           </div>
         </div>
       `;
@@ -943,7 +972,6 @@ renderQuiz() {
                   `;
                 })
                 .join('')}
-            </div>
           </div>
         </div>
       `;
@@ -1066,7 +1094,6 @@ renderQuiz() {
                     .join('')}
                 </div>
               </div>
-            </div>
           </div>
         </div>
       `;
@@ -1203,7 +1230,6 @@ renderQuiz() {
                   </tr>
                 </tbody>
               </table>
-            </div>
           </div>
         </div>
       `;
@@ -1776,7 +1802,7 @@ renderQuiz() {
         }
 
         // Quiz Option Selection
-        const optionBtn = target.closest('.quiz-option-tile, .option-item');
+        const optionBtn = target.closest('.quiz-option-row, .quiz-option-tile, .option-item');
         if (optionBtn && !State.isAnswered) {
           const index = parseInt(optionBtn.getAttribute('data-index'), 10);
           State.answerCurrentQuestion(index);
@@ -1791,12 +1817,10 @@ renderQuiz() {
           return;
         }
 
-        // Finish / Next Problem from Last Question
+        // Finish Quiz -> View Diagnostic Result Report
         if (target.closest('#btn-finish-quiz')) {
-          // Seamlessly fetch another set of questions or next problem
-          const nextSample = DataManager.getRandomSample(20);
-          State.startSession('exam', nextSample);
-          UI.renderQuiz();
+          const record = State.finishSession();
+          UI.renderResult(record);
           window.scrollTo({ top: 0, behavior: 'smooth' });
           return;
         }

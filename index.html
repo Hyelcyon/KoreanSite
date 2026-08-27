@@ -32,9 +32,9 @@
       <!-- Navigation Tabs -->
       <nav class="nav-tabs" role="tablist" aria-label="메인 메뉴">
         <div class="nav-item-dropdown-wrap">
-          <button class="nav-tab-btn" data-tab="exam" role="tab">
+          <button class="nav-tab-btn active" data-tab="exam" role="tab">
             <span class="nav-badge-top">500제</span>
-            국어평가
+            국어
           </button>
 
           <!-- Programmers Sliding White Mega Dropdown Menu (Direct Child of Dropdown Wrap) -->
@@ -44,22 +44,13 @@
               <div class="mega-col">
                 <h4 class="mega-col-title">중세국어 평가 문제</h4>
                 <ul class="mega-link-list">
-                  <li><a href="#" class="mega-link" data-action="all-problems"><span class="mega-link-arrow">&rarr;</span> 모든 문제</a></li>
-                  <li><a href="#" class="mega-link" data-action="basic-problems"><span class="mega-link-arrow">&rarr;</span> 기초 문제</a></li>
-                  <li><a href="#" class="mega-link" data-action="intro-problems"><span class="mega-link-arrow">&rarr;</span> 입문 문제</a></li>
+                  <li><a href="#" class="mega-link active" data-action="all-problems">모든 문제</a></li>
+                  <li><a href="#" class="mega-link" data-action="basic-problems">기초 문제</a></li>
+                  <li><a href="#" class="mega-link" data-action="intro-problems">입문 문제</a></li>
                 </ul>
               </div>
 
-              <!-- Center Column: Special Mode & Skill Check -->
-              <div class="mega-col">
-                <h4 class="mega-col-title">역량 진단 & 인증</h4>
-                <ul class="mega-link-list">
-                  <li><a href="#" class="mega-link" data-action="cert">국어학 역량인증시험</a></li>
-                  <li><a href="#" class="mega-link" data-action="infinite">무한 챌린지 모드</a></li>
-                  <li><a href="#" class="mega-link" data-action="review">오답노트 복습 훈련</a></li>
-                  <li><a href="#" class="mega-link" data-action="weakness">취약 영역 정밀 클리닉</a></li>
-                </ul>
-              </div>
+
 
               <!-- Right Column: Interactive Card Preview -->
               <div class="mega-col-preview">
@@ -82,6 +73,10 @@
             </div>
           </div>
         </div>
+
+        <button class="nav-tab-btn" data-tab="programming" role="tab">
+          프로그래밍
+        </button>
       </nav>
 
       <!-- Right Actions -->
@@ -111,7 +106,8 @@
     <div class="mobile-drawer-body">
       <!-- Left Vertical Category Nav Tabs -->
       <div class="mobile-drawer-left-nav">
-        <button class="mobile-nav-item active" data-target="m-cat-test">국어평가</button>
+        <button class="mobile-nav-item active" data-target="m-cat-test">국어</button>
+        <button class="mobile-nav-item" data-target="m-cat-prog">프로그래밍</button>
         <button class="mobile-nav-item" data-target="m-cat-cert">인증시험</button>
         <button class="mobile-nav-item" data-target="m-cat-study">학습 도구</button>
         <button class="mobile-nav-item" data-target="m-cat-wrong">오답노트</button>
