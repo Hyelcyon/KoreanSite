@@ -194,12 +194,16 @@ class App {
     });
 
     // Catalog live search input
+    let searchDebounceTimer = null;
     document.addEventListener('input', (e) => {
       if (e.target.id === 'catalog-search-input') {
-        const query = e.target.value;
-        const activeCatBtn = document.querySelector('.cat-btn.active');
-        const currentCat = activeCatBtn ? activeCatBtn.getAttribute('data-cat') : 'all';
-        UI.renderCatalog(currentCat, query);
+        if (searchDebounceTimer) clearTimeout(searchDebounceTimer);
+        searchDebounceTimer = setTimeout(() => {
+          const query = e.target.value;
+          const activeCatBtn = document.querySelector('.cat-btn.active');
+          const currentCat = activeCatBtn ? activeCatBtn.getAttribute('data-cat') : 'all';
+          UI.renderCatalog(currentCat, query);
+        }, 60);
       }
     });
   }

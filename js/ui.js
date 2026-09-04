@@ -307,9 +307,40 @@ export const UI = {
     `;
   },
 
+  renderCatalogRows(questions) {
+    return questions
+      .slice(0, 100)
+      .map((q) => {
+        return `
+          <tr data-id="${q.id}">
+            <td style="font-family: var(--font-mono); font-weight: 700; color: var(--text-muted);">${q.id}</td>
+            <td><span class="badge badge-category">${q.category}</span></td>
+            <td style="font-weight: 600;">${q.question}</td>
+            <td>${q.difficulty}</td>
+            <td style="text-align: center;">
+              <button class="btn btn-outline btn-solve-single" data-id="${q.id}" style="padding: 0.25rem 0.55rem; font-size: 0.75rem;">
+                풀기
+              </button>
+            </td>
+          </tr>
+        `;
+      })
+      .join('');
+  },
+
   renderCatalog(category = 'all', searchQuery = '') {
     const categories = dataManager.getCategories();
     const questions = dataManager.searchQuestions(searchQuery, category);
+
+    const tbody = this.root.querySelector('.catalog-table tbody');
+    const countEl = this.root.querySelector('.catalog-result-count');
+    const searchInput = document.getElementById('catalog-search-input');
+
+    if (tbody && countEl && searchInput) {
+      tbody.innerHTML = this.renderCatalogRows(questions);
+      countEl.textContent = `검색 결과: 총 ${questions.length}문항`;
+      return;
+    }
 
     this.root.innerHTML = `
       <div>
@@ -349,7 +380,7 @@ export const UI = {
           </div>
         </div>
 
-        <div style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 0.75rem; font-family: var(--font-mono);">
+        <div class="catalog-result-count" style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 0.75rem; font-family: var(--font-mono);">
           검색 결과: 총 ${questions.length}문항
         </div>
 
@@ -365,24 +396,7 @@ export const UI = {
               </tr>
             </thead>
             <tbody>
-              ${questions
-                .slice(0, 100)
-                .map((q) => {
-                  return `
-                    <tr data-id="${q.id}">
-                      <td style="font-family: var(--font-mono); font-weight: 700; color: var(--text-muted);">${q.id}</td>
-                      <td><span class="badge badge-category">${q.category}</span></td>
-                      <td style="font-weight: 600;">${q.question}</td>
-                      <td>${q.difficulty}</td>
-                      <td style="text-align: center;">
-                        <button class="btn btn-outline btn-solve-single" data-id="${q.id}" style="padding: 0.25rem 0.55rem; font-size: 0.75rem;">
-                          풀기
-                        </button>
-                      </td>
-                    </tr>
-                  `;
-                })
-                .join('')}
+              ${this.renderCatalogRows(questions)}
             </tbody>
           </table>
           ${

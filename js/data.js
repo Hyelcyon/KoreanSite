@@ -19,7 +19,16 @@ export class DataManager {
       const qData = await qRes.json();
       const cData = await cRes.json();
 
-      this.questions = qData.questions || [];
+      this.questions = (qData.questions || []).map((q) => {
+        q._searchTokens = [
+          q.question,
+          q.explanation,
+          q.subcategory,
+          q.category,
+          ...(q.options || [])
+        ].join(' ').toLowerCase();
+        return q;
+      });
       this.categories = qData.categories || [];
       this.corpus = cData || null;
       this.isLoaded = true;
@@ -55,14 +64,7 @@ export class DataManager {
     const base = this.getByCategory(category);
     if (!query || !query.trim()) return base;
     const q = query.trim().toLowerCase();
-    return base.filter((item) => {
-      return (
-        item.question.toLowerCase().includes(q) ||
-        item.explanation.toLowerCase().includes(q) ||
-        item.subcategory.toLowerCase().includes(q) ||
-        item.options.some((opt) => opt.toLowerCase().includes(q))
-      );
-    });
+    return base.filter((item) => item._searchTokens.includes(q));
   }
 
   getCorpus() {
